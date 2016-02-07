@@ -60,9 +60,10 @@ class LendingClub:
 
 	def download_latest_note_info(self):
 		self.browser.implicitly_wait(30)
-		if(os.path.isfile("C:/Users/Venkata/Documents/Project007/LifeAutomation/financialProduct/lendingClubAnalytics/inputfiles/primaryMarketNotes_browseNotes_1-RETAIL.csv")):
+		if(os.path.isfile("PWD/primaryMarketNotes_browseNotes_1-RETAIL.csv")):
+		if(os.path.isfile("PWD/primaryMarketNotes_browseNotes_1-RETAIL.csv")):
 			print "deleting the old file before downloading latest note information"
-			os.remove("C:/Users/Venkata/Documents/Project007/LifeAutomation/financialProduct/lendingClubAnalytics/inputfiles/primaryMarketNotes_browseNotes_1-RETAIL.csv")
+			os.remove("PWD/primaryMarketNotes_browseNotes_1-RETAIL.csv")
 		print "downloading new csv file"
 	
 		link = self.browser.find_element_by_id("browseDownloadAllLink")
@@ -71,10 +72,10 @@ class LendingClub:
 		href = link.get_attribute('href')
 		download = self.browser.get(href)
 		self.browser.implicitly_wait(180)
-		while(os.path.isfile("C:/Users/Venkata/Downloads/primaryMarketNotes_browseNotes_1-RETAIL.csv.part") ):
+		while(os.path.isfile("DEFAULTDOWNLOADPATH/primaryMarketNotes_browseNotes_1-RETAIL.csv.part") ):
 			self.browser.implicitly_wait(180)
 			print "waiting for download to be completed.."
-		shutil.move("C:/Users/Venkata/Downloads/primaryMarketNotes_browseNotes_1-RETAIL.csv","C:/Users/Venkata/Documents/Project007/LifeAutomation/financialProduct/lendingClubAnalytics/inputfiles/")
+		shutil.move("DEFAULTDOWNLOADPATH","PWD")
 
 		
 	def add_investment_to_order(self):
