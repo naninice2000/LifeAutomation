@@ -7,12 +7,16 @@
 
 import sys
 from LendingClubUIIntractions import * 
+import platform
+import glob,os
+import os.path 
+
 
 inputfile=sys.argv[1]
 username=sys.argv[2]
 password=sys.argv[3]
 expected_min_interest_rate=float(sys.argv[4])
-# default_download_path = sys.argv[4]
+default_download_dir = sys.argv[5]
 
 
 LowestRisk={"Credit_Score":760,"DTI":10,"MaxCreditUtilization":10,"RequestedLoanToIncomeFactor":0.10}
@@ -24,6 +28,18 @@ HighestRisk={"Credit_Score":500,"DTI":20,"MaxCreditUtilization":80,"RequestedLoa
 LoanMap={}
 #expected_min_interest_rate=raw_input("Please enter minimun expected rate of interest looking to earn:")
 
+
+currentDirectory=os.getcwd()
+currentInputDirectory=""
+if(platform.system() == "Windows"):
+	currentInputDirectory = currentDirectory+"/inputdir/"
+else:
+	currentInputDirectory = currentDirectory+"/inputdir/"
+
+if not os.path.exists(currentInputDirectory):
+	os.makedirs(currentInputDirectory)
+
+	
 def read_note_data_file():
 	try: 
 		datafile=open(inputfile,"r")
@@ -116,7 +132,7 @@ def checkForNoDelinquencyHistory():
 	
 	
 print "*************************************************************************"
-print "                     Peer to Peer Lending Optimizer                     "
+print "                     Peer to Peer Lending Optimizer                      "
 print "Algoritham Author: Venkata "
 print "Build: 0.1 "
 print "*************************************************************************"
@@ -128,10 +144,10 @@ lending_club_ui.login_into_account(username,password)
 lending_club_ui.wait_for_some_time(10)
 lending_club_ui.browse_investment_notes()
 lending_club_ui.wait_for_some_time(10)
-lending_club_ui.download_latest_note_info()
+lending_club_ui.download_latest_note_info(currentInputDirectory,default_download_dir)
 lending_club_ui.wait_for_some_time(10)
 print "Downloading latest note information completed"
-
+		
 read_note_data_file()
 LoanMap=checkForCreditScore(720)
 LoanMap=checkForDebtToIncomeRatio(20)

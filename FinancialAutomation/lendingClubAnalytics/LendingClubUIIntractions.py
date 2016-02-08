@@ -11,6 +11,7 @@ class LendingClub:
 	username=""
 	password=""
 	currentDirectory=os.getcwd()
+	currentInputDirectory = "inputdir"
 
 	#FirefoxProfile profile = webdriver.FirefoxProfile();
 	profile = webdriver.FirefoxProfile()
@@ -27,6 +28,9 @@ class LendingClub:
 		self.username=username
 		self.password=password
 		self.currentDirectory=os.getcwd()
+		self.currentInputDirectory = self.currentDirectory+"/inputdir/"
+		if not os.path.exists(self.currentInputDirectory):
+			os.makedirs(self.currentInputDirectory)
 		
 
 	def open_lending_club(self,url):
@@ -58,12 +62,13 @@ class LendingClub:
 	def open_loan_url(self,url):
 		self.browser.get(url)
 
-	def download_latest_note_info(self):
+	def download_latest_note_info(self,inputdir,default_download_dir):
 		self.browser.implicitly_wait(30)
-		if(os.path.isfile("PWD/primaryMarketNotes_browseNotes_1-RETAIL.csv")):
-		if(os.path.isfile("PWD/primaryMarketNotes_browseNotes_1-RETAIL.csv")):
+		oldFile = inputdir+"primaryMarketNotes_browseNotes_1-RETAIL.csv"
+		print oldFile
+		if(os.path.isfile(oldFile)):
 			print "deleting the old file before downloading latest note information"
-			os.remove("PWD/primaryMarketNotes_browseNotes_1-RETAIL.csv")
+			os.remove(oldFile)
 		print "downloading new csv file"
 	
 		link = self.browser.find_element_by_id("browseDownloadAllLink")
@@ -72,10 +77,12 @@ class LendingClub:
 		href = link.get_attribute('href')
 		download = self.browser.get(href)
 		self.browser.implicitly_wait(180)
-		while(os.path.isfile("DEFAULTDOWNLOADPATH/primaryMarketNotes_browseNotes_1-RETAIL.csv.part") ):
+		downloaded_file = default_download_dir+"primaryMarketNotes_browseNotes_1-RETAIL.csv"
+		temp_file = downloaded_file+".part"
+		while(os.path.isfile(temp_file)):
 			self.browser.implicitly_wait(180)
 			print "waiting for download to be completed.."
-		shutil.move("DEFAULTDOWNLOADPATH","PWD")
+		shutil.move(downloaded_file,inputdir)
 
 		
 	def add_investment_to_order(self):
