@@ -35,3 +35,5 @@ This file is available in JSON format, you can find sample below:
 
 There are 4 risk types starting from Lowest to High, in these RiskTypes you have parameters credit score, credit utilization, debt to income ration ect. 
 You can find different parameters which are very critical for making decission in peer to peer lending. 
+
+For more details about LendingClubAnalytics Automation details are available in Readme.txt inside FinancialAutomation directory
