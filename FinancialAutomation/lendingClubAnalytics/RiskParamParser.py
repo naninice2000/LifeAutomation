@@ -7,44 +7,41 @@ class RiskParamParser:
 	credit_utilization=0
 	credit_score=0
 	LoanRiskConfigMap={}
-	json_config_data=json.loads({})
-	risk_level=""
-	LowestRiskDataMap={}
-	owRiskDataMap={}
-	MediumRiskDataMap={}
-	HighRiskDataMap={}
-	HighestRiskDataMap={}
 
-	def __init__(self):
+	
+	def __init__(self,risk_level):
 		try:
-			json_data=open("./conf/Risk_Config.conf").read()
+			self.json_data=open("./conf/Risk_Config.conf").read()
 		except: 
 			print "not able to read confi file at location ./conf/Risk_Config.conf"
 		else: 
-			json_config_data = json.loads(json_data)
-			LowestRiskDataMap["credit_score"]=data["RiskDataSet"][0]["RiskFactors"]["credit_score"]
-			LowestRiskDataMap["credit_utilization"]=data["RiskDataSet"][0]["RiskFactors"]["credit_utilization"]
-			LowestRiskDataMap["debt_to_income_ratio"]=data["RiskDataSet"][0]["RiskFactors"]["debt_to_income_ratio"]
-			LowRiskDataMap["credit_score"]=data["RiskDataSet"][1]["RiskFactors"]["credit_score"]
-			LowRiskDataMap["credit_utilization"]=data["RiskDataSet"][1]["RiskFactors"]["credit_utilization"]
-			LowRiskDataMap["debt_to_income_ratio"]=data["RiskDataSet"][1]["RiskFactors"]["debt_to_income_ratio"]
-			MediumRiskDataMap["credit_score"]=data["RiskDataSet"][2]["RiskFactors"]["credit_score"]
-			MediumRiskDataMap["credit_utilization"]=data["RiskDataSet"][2]["RiskFactors"]["credit_utilization"]
-			MediumRiskDataMap["debt_to_income_ratio"]=data["RiskDataSet"][2]["RiskFactors"]["debt_to_income_ratio"]
-			HighRiskDataMap["credit_score"]=data["RiskDataSet"][3]["RiskFactors"]["credit_score"]
-			HighRiskDataMap["credit_utilization"]=data["RiskDataSet"][3]["RiskFactors"]["credit_utilization"]
-			HighRiskDataMap["debt_to_income_ratio"]=data["RiskDataSet"][3]["RiskFactors"]["debt_to_income_ratio"]
-			HighestRiskDataMap["credit_score"]=data["RiskDataSet"][4]["RiskFactors"]["credit_score"]
-			HighestRiskDataMap["credit_utilization"]=data["RiskDataSet"][4]["RiskFactors"]["credit_utilization"]
-			HighestRiskDataMap["debt_to_income_ratio"]=data["RiskDataSet"][4]["RiskFactors"]["debt_to_income_ratio"]
+			self.json_config_data = json.loads(self.json_data)
+		
+		if(risk_level=="Lowest"):
+			self.risk_level_param = 0
+		elif(risk_level=="Low"):
+			self.risk_level_param=1
+		elif(risk_level=="Medium"):
+			self.risk_level_param=2
+		elif(risk_level=="High"):
+			self.risk_level_param=3
+		else:
+			self.risk_level_param=4
 
-
-	def setRiskLevel(self,risk_level):
+	def setRiskLevel(self):
 		self.risk_level=risk_level
 		
 	def getCreditScore(self):
+		return self.json_config_data["RiskDataSet"][self.risk_level_param]["RiskType"]["credit_score"]
 		
 	def getDTIRatio(self):
+		return self.json_config_data["RiskDataSet"][self.risk_level_param]["RiskType"]["debt_to_income_ratio"]
 
 	def getCreditUtilization(self):
- 
+		return self.json_config_data["RiskDataSet"][self.risk_level_param]["RiskType"]["credit_utilization"]
+
+	def getDelinquencyHistory(self):
+		return self.json_config_data["RiskDataSet"][self.risk_level_param]["RiskType"]["Delinquencies"]
+
+	def getLoanTerm(self):
+		return self.json_config_data["RiskDataSet"][self.risk_level_param]["RiskType"]["loan_term"]
