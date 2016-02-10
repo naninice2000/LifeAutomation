@@ -5,6 +5,13 @@ things which they perfom regularly. Such as playing certain type of music, makin
 defined risk, Running investment perform analytics ect, not limited to this in near future these features are going to
 be enhanced to automate as much small task as possible evening using 3rd part hardware and software components. 
 
+-----------------------------------------
+Software Requirements: 
+-----------------------------------------
+Browser: Firefox
+Scripting Language: Python 2.7.x
+Additional python Modules: Selenium Webdriver
+
 
 -----------------------------------------
 FinancialAutomation: 

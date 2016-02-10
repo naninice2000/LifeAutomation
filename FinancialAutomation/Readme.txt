@@ -12,3 +12,7 @@ One of the important recommendation, these script will not avoid any risks assoc
 How to use these scripts? 
 
 It's very important that every user should understand how to use these script then only there this will solve it's purpose
+
+run the following command from command line or terminal
+
+python ./lendingClubAnalytics.py <RiskLevel> <UserName> <password> <expected Intereset%> <Default Download path>
