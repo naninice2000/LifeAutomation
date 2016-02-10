@@ -10,9 +10,10 @@ from LendingClubUIIntractions import *
 import platform
 import glob,os
 import os.path 
+from RiskParamParser import *
 
 
-inputfile=sys.argv[1]
+risk_level=sys.argv[1]
 username=sys.argv[2]
 password=sys.argv[3]
 expected_min_interest_rate=float(sys.argv[4])
@@ -39,7 +40,7 @@ else:
 if not os.path.exists(currentInputDirectory):
 	os.makedirs(currentInputDirectory)
 
-	
+inputfile="./inputdir/primaryMarketNotes_browseNotes_1-RETAIL.csv"
 def read_note_data_file():
 	try: 
 		datafile=open(inputfile,"r")
@@ -114,7 +115,7 @@ def checkForRiskFactor(request_factor):
 		RequestedLoanAmount = loanDetails[2].replace('"','')
 		# print revolving_credit_utilization
 		if(request_factor <= getRequestedDebitToIncomeFactor(float(AnnualGrossIncome),float(RequestedLoanAmount))):
-			print LoanID,request_factor,getRequestedDebitToIncomeFactor(float(AnnualGrossIncome),float(RequestedLoanAmount))
+			#print LoanID,request_factor,getRequestedDebitToIncomeFactor(float(AnnualGrossIncome),float(RequestedLoanAmount))
 			updatedLoanMap[LoanID]=loanDetails
 	return updatedLoanMap
 	
@@ -148,23 +149,34 @@ lending_club_ui.download_latest_note_info(currentInputDirectory,default_download
 lending_club_ui.wait_for_some_time(10)
 print "Downloading latest note information completed"
 		
+		
+risk_info = RiskParamParser(risk_level)
+	
 read_note_data_file()
-LoanMap=checkForCreditScore(720)
-LoanMap=checkForDebtToIncomeRatio(20)
+
+LoanMap=checkForCreditScore(risk_info.getCreditScore())
+LoanMap=checkForDebtToIncomeRatio(risk_info.getDTIRatio())
 LoanMap=checkForCreditUtilization(20)
 LoanMap=checkForNoDelinquencyHistory()
 LoanMap=checkForRiskFactor(0.25)
-for loanid in LoanMap.keys():
-	loan_details=LoanMap[loanid]
-	interest_rate = loan_details[5].replace('"','')
-	if(expected_min_interest_rate<=float(interest_rate)):
-		interest_rate=interest_rate+"%"
-		loan_url = loan_details[22].replace('"','')
-		print "Loan id with possible reduced risk",loanid
-		print "Interest Rate:",interest_rate
-		print "URL:",loan_url
-		lending_club_ui.open_loan_url(loan_url)
-		print "*************************************************************************"
+
+print len(LoanMap.keys())
+if(len(LoanMap.keys())==0):
+	print "No notes found with giving risk criteria with Risk Level ",risk_level
+else:
+	for loanid in LoanMap.keys():
+		loan_details=LoanMap[loanid]
+		interest_rate = loan_details[5].replace('"','')
+		if(expected_min_interest_rate<=float(interest_rate)):
+			interest_rate=interest_rate+"%"
+			loan_url = loan_details[22].replace('"','')
+			print "Loan id with possible reduced risk",loanid
+			print "Interest Rate:",interest_rate
+			print "URL:",loan_url
+			lending_club_ui.open_loan_url(loan_url)
+			print "*************************************************************************"
+		else:
+			print "There are ",len(LoanMap.keys()),"notes found but minimum expected interest is lower"
 
 lending_club_ui.close_browser()
 
