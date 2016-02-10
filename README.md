@@ -8,9 +8,9 @@ be enhanced to automate as much small task as possible evening using 3rd part ha
 -----------------------------------------
 Software Requirements: 
 -----------------------------------------
-Browser: Firefox
-Scripting Language: Python 2.7.x
-Additional python Modules: Selenium Webdriver
+Browser: Firefox </br>
+Scripting Language: Python 2.7.x </br>
+Additional python Modules: Selenium Webdriver </br>
 
 
 -----------------------------------------
